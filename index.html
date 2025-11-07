@@ -1,0 +1,106 @@
+<html>
+
+<head>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Comic+Relief:wght@400;700&display=swap');
+
+        body {
+            font-family: "Comic Relief", system-ui;
+            font-weight: 400;
+            font-style: normal;
+        }
+
+        #bossHealthBox,
+        #playerHealthBox {
+            border: 2px solid black;
+            width: 100%;
+            height: 50px;
+            margin-top: 30px;
+            padding: 0px;
+        }
+
+        #bossHealthDisplay {
+            position: absolute;
+            top: 30px;
+            width: 100%;
+        }
+
+        #playerHealthDisplay {
+            position: absolute;
+            top: 115px;
+            width: 100%;
+        }
+
+        #healthBoss {
+            background: rgb(194, 0, 0);
+            height: 50px;
+            width: 100%;
+            margin: 0px;
+            text-align: center;
+        }
+
+        #healthPlayer {
+            background: green;
+            height: 50px;
+            width: 100%;
+            margin: 0px;
+            text-align: center;
+        }
+
+        .healthDisplay {
+            font-size: 35px;
+            text-align: center;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="bossHealthBox">
+        <div id="healthBoss"> </div>
+        <div id="bossHealthDisplay" class="healthDisplay">Boss: 100%</div>
+    </div>
+    <div id="playerHealthBox">
+        <div id="healthPlayer"> </div>
+        <div id="playerHealthDisplay" class="healthDisplay">Player: 100%</div>
+    </div>
+    <div id="playerButtons">
+        <button onclick="dealDamageToBoss()">Ice Spell</button>
+        <button onclick="dealDamageToBoss()">Fire Spell</button>
+        <button onclick="dealDamageToBoss()">Ice Sword</button>
+        <button onclick="dealDamageToBoss()">Fire Sword</button>
+    </div>
+
+    <script>
+        let bossHealth = 100
+        let playerHealth = 50
+        function dealDamageToBoss() {
+            bossHealth = bossHealth - Math.floor(Math.random() * 15)
+
+            if (bossHealth < 0) {
+                bossHealth = 0
+                document.getElementById('healthBoss').style.width = `${bossHealth}%`;
+                document.getElementById('bossHealthDisplay').innerHTML = `Boss: ${bossHealth}%`;
+            } else {
+            document.getElementById('healthBoss').style.width = `${bossHealth}%` ;
+            document.getElementById('bossHealthDisplay').innerHTML = `Boss: ${bossHealth}%`;
+            }
+            console.log(bossHealth)
+        }
+
+        function dealDamageToPlayer() {
+            playerHealth = playerHealth - Math.floor(Math.random() * 10)
+
+            if (playerHealth < 0) {
+                playerHealth = 0
+                document.getElementById('healthPlayer').style.width = `${playerHealth}%`;
+                document.getElementById('playerHealthDisplay').innerHTML = `Player: ${playerHealth}%`;
+            } else {
+                document.getElementById('healthPlayer').style.width = `${playerHealth}%`;
+                document.getElementById('playerHealthDisplay').innerHTML = `Player: ${playerHealth}%`;
+            }
+            console.log(playerHealth)
+        }
+    </script>
+</body>
+
+</html>
