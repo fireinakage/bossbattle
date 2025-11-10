@@ -71,6 +71,7 @@
     </div>
 
     <script>
+        const bossAtacks = ['Sneak Attack', 'Dragons Breath']
         let bossHealth = 100
         let playerHealth = 50
         function dealDamageToBoss() {
@@ -99,6 +100,11 @@
                 document.getElementById('playerHealthDisplay').innerHTML = `Player: ${playerHealth}%`;
             }
             console.log(playerHealth)
+        }
+
+        function attack() {
+            dealDamageToBoss()
+            dealDamageToPlayer()
         }
     </script>
 </body>
