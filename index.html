@@ -71,19 +71,35 @@
     </div>
 
     <script>
-        const bossAtacks = ['Sneak Attack', 'Dragons Breath']
-        let bossHealth = 100
+        const bossAtacks = ['Sneak Attack', 'Dragons Breath', 'Reverse Evolution', 'De-Photosynthizie', 'Bromine Release']
+        let constBossHealth = Math.floor(Math.random() * 21) + 30
+        let bossHealth = constBossHealth
         let playerHealth = 50
+        let iceWeakness = randomTrueFalse()
+        let magicWeakness = randomTrueFalse()
+
+        function randomTrueFalse() {
+            let num = Math.random() 
+            if (num < 5) {
+                return true
+            } else {
+                return false
+            }
+        }
         function dealDamageToBoss() {
-            bossHealth = bossHealth - Math.floor(Math.random() * 15)
+            let damage = Math.floor(Math.random() * 15)
+            bossHealth -= damage;
+            // percent version
+            bossDisplayHealth = bossHealth / constBossHealth
+            bossDisplayHealth = Math.floor(bossDisplayHealth * 100)
 
             if (bossHealth < 0) {
                 bossHealth = 0
-                document.getElementById('healthBoss').style.width = `${bossHealth}%`;
-                document.getElementById('bossHealthDisplay').innerHTML = `Boss: ${bossHealth}%`;
+                document.getElementById('healthBoss').style.width = `${bossDisplayHealth}%`;
+                document.getElementById('bossHealthDisplay').innerHTML = `Boss: ${bossDisplayHealth}%`;
             } else {
-            document.getElementById('healthBoss').style.width = `${bossHealth}%` ;
-            document.getElementById('bossHealthDisplay').innerHTML = `Boss: ${bossHealth}%`;
+            document.getElementById('healthBoss').style.width = `${bossDisplayHealth}%` ;
+            document.getElementById('bossHealthDisplay').innerHTML = `Boss: ${bossDisplayHealth}%`;
             }
             console.log(bossHealth)
         }
