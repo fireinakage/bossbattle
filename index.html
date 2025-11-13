@@ -51,6 +51,10 @@
             font-size: 35px;
             text-align: center;
         }
+
+        #bossAttack {
+            font-size: 25px;
+        }
     </style>
 </head>
 
@@ -64,96 +68,103 @@
         <div id="playerHealthDisplay" class="healthDisplay">Player: 100%</div>
     </div>
     <div id="playerButtons">
-        <button onclick="dealDamageToBoss()">Ice Spell</button>
-        <button onclick="dealDamageToBoss()">Fire Spell</button>
-        <button onclick="dealDamageToBoss()">Ice Sword</button>
-        <button onclick="dealDamageToBoss()">Fire Sword</button>
+        <button onclick="attack('Ice Spell')">Ice Spell</button>
+        <button onclick="attack('Fire Spell')">Fire Spell</button>
+        <button onclick="attack('Ice Sword')">Ice Sword</button>
+        <button onclick="attack('Fire Sword')">Fire Sword</button>
+    </div>
+    <div id="bossAttack">
+
     </div>
 
     <script>
-        const bossAtacks = ['Sneak Attack', 'Dragons Breath', 'Reverse Evolution', 'De-Photosynthizie', 'Bromine Release']
-        let constBossHealth = Math.floor(Math.random() * 21) + 30
+        const bossAtacks = ['Sneak Attack', 'Dragons Breath', 'Reverse Evolution', 'De-Photosynthizie', 'Bromine Release', 'Pop Quiz', 'Test you did not study for']
+        let constBossHealth = Math.floor(Math.random() * 20) + 30
         let bossHealth = constBossHealth
         let playerHealth = 50
         let iceWeakness = randomTrueFalse()
         let magicWeakness = randomTrueFalse()
 
+        console.log(`iceWeakness: ${iceWeakness} \n magicWeakness: ${magicWeakness} \n Boss Health: ${constBossHealth}`)
+
 
         function randomTrueFalse() {
-            let num = Math.random() 
-            if (num < 5) {
+            let num = Math.random()
+            if (num < 0.5) {
                 return true
             } else {
                 return false
             }
         }
-        function dealDamageToBoss() {
-            let damage = Math.floor(Math.random() * 15)
+        function dealDamageToBoss(weapon) {
+            let damage = Math.floor(Math.random() * 10)
             bossHealth -= damage;
             // percent version
             bossDisplayHealth = bossHealth / constBossHealth
             bossDisplayHealth = Math.floor(bossDisplayHealth * 100)
 
-              if (iceWeakness == true && weapon.includes('Ice')) {
+            if (iceWeakness == true && weapon.includes('Ice')) {
                 damage = Math.floor(Math.random() * 5)
-            playerHealth = playerHealth - damage
-            // percent version
-            playerDisplayHealth = playerHealth / 50
-            playerDisplayHealth = Math.floor(playerDisplayHealth * 100)
+                bossHealth = bossHealth - damage
+                // percent version
+                bossDisplayHealth = bossHealth / 50
+                bossDisplayHealth = Math.floor(bossDisplayHealth * 100)
             } else if (iceWeakness == false && weapon.includes('Fire')) {
                 damage = Math.floor(Math.random() * 5)
-            playerHealth = playerHealth - damage
-            // percent version
-            playerDisplayHealth = playerHealth / 50
-            playerDisplayHealth = Math.floor(playerDisplayHealth * 100)
+                bossHealth = bossHealth - damage
+                // percent version
+                bossDisplayHealth = bossHealth / 50
+                bossDisplayHealth = Math.floor(bossDisplayHealth * 100)
             }
 
-            if (magicWeakness == true && weapon.includes('Spell'))
+
+            if (magicWeakness == true && weapon.includes('Spell')) {
+                damage = Math.floor(Math.random() * 4) + 1
+                bossHealth = bossHealth - damage
+                // percent version
+                bossDisplayHealth = bossHealth / 50
+                bossDisplayHealth = Math.floor(bossDisplayHealth * 100)
+            } else if (magicWeakness == false && weapon.includes('Sword')) {
+                damage = Math.floor(Math.random() * 5)
+                bossHealth = bossHealth - damage
+                // percent version
+                bossDisplayHealth = bossHealth / 50
+                bossDisplayHealth = Math.floor(bossDisplayHealth * 100)
+            }
 
             if (bossDisplayHealth < 0) {
                 bossHealth = 0
                 bossDisplayHealth = 0
                 document.getElementById('healthBoss').style.width = `${bossDisplayHealth}%`;
+                document.getElementById('playerButtons').innerHTML = '';
                 document.getElementById('bossHealthDisplay').innerHTML = `Boss: ${bossDisplayHealth}%`;
+                document.getElementById('bossAttack').innerHTML = 'YOU WIN ! !';
             } else {
-            document.getElementById('healthBoss').style.width = `${bossDisplayHealth}%` ;
-            document.getElementById('bossHealthDisplay').innerHTML = `Boss: ${bossDisplayHealth}%`;
+                document.getElementById('healthBoss').style.width = `${bossDisplayHealth}%`;
+                document.getElementById('bossHealthDisplay').innerHTML = `Boss: ${bossDisplayHealth}%`;
             }
-            console.log(bossHealth)
+            console.log('Remaining Boss Health: ' + bossHealth)
         }
 
-        function dealDamageToPlayer(weapon) {
+        function dealDamageToPlayer() {
             damage = Math.floor(Math.random() * 10)
             playerHealth = playerHealth - damage
             // percent version
             playerDisplayHealth = playerHealth / 50
             playerDisplayHealth = Math.floor(playerDisplayHealth * 100)
 
-            if (iceWeakness == true && weapon.includes('Ice')) {
-                damage = Math.floor(Math.random() * 5)
-            playerHealth = playerHealth - damage
-            // percent version
-            playerDisplayHealth = playerHealth / 50
-            playerDisplayHealth = Math.floor(playerDisplayHealth * 100)
-            } else if (iceWeakness == false && weapon.includes('Fire')) {
-                damage = Math.floor(Math.random() * 5)
-            playerHealth = playerHealth - damage
-            // percent version
-            playerDisplayHealth = playerHealth / 50
-            playerDisplayHealth = Math.floor(playerDisplayHealth * 100)
-            }
-
-            if (magicWeakness == true && weapon.includes('Spell'))
-
             if (playerHealth < 0) {
                 playerHealth = 0
                 document.getElementById('healthPlayer').style.width = `${playerHealth}%`;
+                document.getElementById('playerButtons').innerHTML = '';
                 document.getElementById('playerHealthDisplay').innerHTML = `Player: ${playerHealth}%`;
+                document.getElementById('bossAttack').innerHTML = 'YOU LOOSE ! !';
             } else {
                 document.getElementById('healthPlayer').style.width = `${playerHealth}%`;
                 document.getElementById('playerHealthDisplay').innerHTML = `Player: ${playerHealth}%`;
             }
-            console.log(playerHealth)
+            console.log('Remaining Player Health: ' + playerHealth)
+            return damage
         }
 
         function chooseAttack() {
@@ -161,9 +172,17 @@
             return bossAtacks[num]
         }
 
-        function attack() {
-            dealDamageToBoss()
-            dealDamageToPlayer()
+        function attack(weapon) {
+            chooseAttack()
+            dealDamageToBoss(weapon)
+            let playerDamage = dealDamageToPlayer()
+            document.getElementById('bossAttack').innerHTML = `The boss uses ${chooseAttack()} and deals ${playerDamage} damage`;
+
+            if (playerHealth == 0) {
+                document.getElementById('bossAttack').innerHTML = 'YOU LOOSE ! !';
+            } else if (bossHealth == 0) {
+                document.getElementById('bossAttack').innerHTML = 'YOU WIN ! !';
+            }
         }
     </script>
 </body>
