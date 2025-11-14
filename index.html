@@ -97,41 +97,35 @@
                 return false
             }
         }
+
+        function diceRoll() {
+            return Math.floor(Math.random() * 6) + 1
+        }
         function dealDamageToBoss(weapon) {
-            let damage = Math.floor(Math.random() * 10)
-            bossHealth -= damage;
-            // percent version
-            bossDisplayHealth = bossHealth / constBossHealth
-            bossDisplayHealth = Math.floor(bossDisplayHealth * 100)
+            let damage = diceRoll()
+
+            if (playerHealth == 0) {
+                return 0
+            }
 
             if (iceWeakness == true && weapon.includes('Ice')) {
-                damage = Math.floor(Math.random() * 5)
-                bossHealth = bossHealth - damage
-                // percent version
-                bossDisplayHealth = bossHealth / 50
-                bossDisplayHealth = Math.floor(bossDisplayHealth * 100)
+                damage += diceRoll()
             } else if (iceWeakness == false && weapon.includes('Fire')) {
-                damage = Math.floor(Math.random() * 5)
-                bossHealth = bossHealth - damage
-                // percent version
-                bossDisplayHealth = bossHealth / 50
-                bossDisplayHealth = Math.floor(bossDisplayHealth * 100)
+                damage += diceRoll()
             }
 
 
             if (magicWeakness == true && weapon.includes('Spell')) {
-                damage = Math.floor(Math.random() * 4) + 1
-                bossHealth = bossHealth - damage
-                // percent version
-                bossDisplayHealth = bossHealth / 50
-                bossDisplayHealth = Math.floor(bossDisplayHealth * 100)
+                damage += diceRoll()
             } else if (magicWeakness == false && weapon.includes('Sword')) {
-                damage = Math.floor(Math.random() * 5)
-                bossHealth = bossHealth - damage
-                // percent version
-                bossDisplayHealth = bossHealth / 50
-                bossDisplayHealth = Math.floor(bossDisplayHealth * 100)
+                damage += diceRoll()
+
             }
+
+            bossHealth = bossHealth - damage
+            // percent version
+            bossDisplayHealth = bossHealth / 50
+            bossDisplayHealth = Math.floor(bossDisplayHealth * 100)
 
             if (bossDisplayHealth < 0) {
                 bossHealth = 0
@@ -145,21 +139,26 @@
                 document.getElementById('bossHealthDisplay').innerHTML = `Boss: ${bossDisplayHealth}%`;
             }
             console.log('Remaining Boss Health: ' + bossHealth)
+            return damage
         }
 
         function dealDamageToPlayer() {
-            damage = Math.floor(Math.random() * 13)
+            damage = diceRoll() + diceRoll();
             playerHealth = playerHealth - damage
             // percent version
             playerDisplayHealth = playerHealth / 50
             playerDisplayHealth = Math.floor(playerDisplayHealth * 100)
+
+            if (bossHealth == 0) {
+                return 0
+            }
 
             if (playerHealth < 0) {
                 playerHealth = 0
                 document.getElementById('healthPlayer').style.width = `${playerHealth}%`;
                 document.getElementById('playerButtons').innerHTML = '';
                 document.getElementById('playerHealthDisplay').innerHTML = `Player: ${playerHealth}%`;
-                document.getElementById('bossAttack').innerHTML = 'YOU LOOSE ! !';
+                document.getElementById('bossAttack').innerHTML = 'YOU LOSE ! !';
             } else {
                 document.getElementById('healthPlayer').style.width = `${playerHealth}%`;
                 document.getElementById('playerHealthDisplay').innerHTML = `Player: ${playerHealth}%`;
@@ -175,12 +174,12 @@
 
         function attack(weapon) {
             chooseAttack()
-            dealDamageToBoss(weapon)
+            let bossDamage = dealDamageToBoss(weapon)
             let playerDamage = dealDamageToPlayer()
-            document.getElementById('bossAttack').innerHTML = `The boss uses ${chooseAttack()} and deals ${playerDamage} damage`;
+            document.getElementById('bossAttack').innerHTML = `You dealt ${bossDamage} to the boss. The boss uses ${chooseAttack()} and deals ${playerDamage} damage`;
 
             if (playerHealth == 0) {
-                document.getElementById('bossAttack').innerHTML = 'YOU LOOSE ! !';
+                document.getElementById('bossAttack').innerHTML = 'YOU LOSE ! !';
             } else if (bossHealth == 0) {
                 document.getElementById('bossAttack').innerHTML = 'YOU WIN ! !';
             }
